@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.enity.User;
 import com.example.demo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -9,29 +10,18 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping
-    public User getUserById(@RequestParam("id") int id) {
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable int id) {
         return userService.getUser(id);
     }
 
-    @PostMapping
-    public User getUserByJson(@RequestBody UserRequest request) {
-        return userService.getUser(request.getId());
-    }
-
-    public static class UserRequest {
-        private int id;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
+    @GetMapping("/query")
+    public User getUserByQueryParam(@RequestParam int id) {
+        return userService.getUser(id);
     }
 }
